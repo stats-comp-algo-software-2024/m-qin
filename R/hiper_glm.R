@@ -2,7 +2,7 @@
 #'
 #' @details This function makes a hiperglm object from a design matrix and an outcome vector.
 #'
-#' @param design a n x p design matrix of numeric or factor predictors, possible including an intercept.
+#' @param design a n x p design matrix of numeric or factor predictors, possibly including an intercept.
 #' @param outcome a n-length numeric vector of outcomes.
 #'
 #' @return a fitted hiperglm object.
@@ -19,5 +19,3 @@ hiper_glm <- function(design, outcome){
                         class = "hiperglm")
   return(hiperglm)
 }
-
-
