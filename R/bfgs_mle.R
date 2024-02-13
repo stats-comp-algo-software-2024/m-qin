@@ -13,8 +13,7 @@ bfgs_mle <- function(design, outcome){
                       fn = function(beta) loglik(design, outcome, beta),
                       gr = function(beta) gradient_of_loglik(design, outcome, beta),
                       method = "BFGS",
-                      control = list(fnscale = -1, # maximize log likelihood (optim() default is to minimize)
-                                     reltol = 1e-9)) # we want absolute and relative precision to be 1e-6; changing abstol parameter didn't seem to do anything
+                      control = list(fnscale = -1)) # maximize log likelihood (optim() default is to minimize)
   mle <- bfgs$par
   return(mle)
 }
