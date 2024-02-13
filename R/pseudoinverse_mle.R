@@ -9,10 +9,13 @@
 #' @return The estimated MLE for beta, i.e., (X^T X)^{-1} X^T y, as a vector.
 #'
 pseudoinverse_mle <- function(design, outcome){
-  n_pred <- ncol(design) # p
-  pseudoinv <- solve(t(design) %*% design, diag(n_pred)) # (X^T X)^{-1}
-  beta_hat <- pseudoinv %*% t(design) %*% outcome
-  beta_hat <- as.vector(beta_hat) # return as vector, not p x 1 matrix, for conformity with other functions
+  # we want beta_hat = (X^T X)^{-1} X^T y
+  # i.e., X^T X beta_hat = X^T y
+  # so beta_hat is the solution to solve(X^T X, X^T y)
+  beta_hat <- solve(t(design) %*% design, t(design) %*% outcome) # to do: think about whether t(design) is computationally intensive; should I save it somewhere?
+
+  # return as vector, not p x 1 matrix, for conformity with other functions
+  beta_hat <- as.vector(beta_hat)
   return(beta_hat)
 }
 
