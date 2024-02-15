@@ -9,11 +9,11 @@
 #' @return The estimated MLE for beta, i.e., value of beta that maximizes the (log) likelihood, as a vector.
 #'
 bfgs_mle <- function(design, outcome){
-  bfgs <- stats::optim(par = rep(0, ncol(design)), # set initial value to beta=0
+  bfgs <- stats::optim(par = rep(0, ncol(design)),
                       fn = function(beta) loglik(design, outcome, beta),
                       gr = function(beta) gradient_of_loglik(design, outcome, beta),
                       method = "BFGS",
-                      control = list(fnscale = -1)) # maximize log likelihood (optim() default is to minimize)
+                      control = list(fnscale = -1)) # maximize
   mle <- bfgs$par
   return(mle)
 }

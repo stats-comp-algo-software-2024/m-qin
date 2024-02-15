@@ -26,7 +26,7 @@ loglik <- function(design, outcome, beta, Sigma_inv = diag(length(outcome))){
 #'
 gradient_of_loglik <- function(design, outcome, beta, Sigma_inv = diag(length(outcome))) {
   residual <- outcome - design %*% beta
-  grad <- t(design) %*% Sigma_inv %*% residual # chain rule on log likelihood
-  grad <- as.vector(grad) # return as vector, not p x 1 matrix, for conformity with other functions
+  grad <- t(design) %*% Sigma_inv %*% residual
+  grad <- as.vector(grad) # for conformity with other functions
   return(grad)
 }
