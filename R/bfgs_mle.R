@@ -5,13 +5,14 @@
 #'
 #' @param design a n x p design matrix of numeric or factor predictors, possible including an intercept.
 #' @param outcome a n-length numeric vector of outcomes.
+#' @param model a character indicating the link function between the linear predictors and the mean of the outcome.
 #'
 #' @return The estimated MLE for beta, i.e., value of beta that maximizes the (log) likelihood, as a vector.
 #'
-bfgs_mle <- function(design, outcome){
+bfgs_mle <- function(design, outcome, model = "linear"){
   bfgs <- stats::optim(par = rep(0, ncol(design)),
-                      fn = function(beta) loglik(design, outcome, beta),
-                      gr = function(beta) gradient_of_loglik(design, outcome, beta),
+                      fn = function(beta) loglik(design, outcome, beta, model),
+                      gr = function(beta) gradient_of_loglik(design, outcome, beta, model),
                       method = "BFGS",
                       control = list(fnscale = -1)) # maximize
   mle <- bfgs$par

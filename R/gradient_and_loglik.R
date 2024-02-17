@@ -4,14 +4,19 @@
 #'
 #' @param design a n x p design matrix of numeric or factor predictors, possibly including an intercept.
 #' @param outcome a n-length numeric vector of outcomes.
+#' @param model a character indicating the link function between the linear predictors and the mean of the outcome.
 #' @param beta a p-length numeric vector at which to evaluate the log likelihood, possibly including an intercept.
 #' @param Sigma_inv the covariance matrix for the errors; default is nxn identity matrix; doesn't influence MLE estimate of beta (though would influence estimate of variance of beta).
 #'
 #' @return The log likelihood of the data at beta.
 #'
-loglik <- function(design, outcome, beta, Sigma_inv = diag(length(outcome))){
-  residual <- outcome - design %*% beta
-  logp <- -(1/2) * t(residual) %*% Sigma_inv %*% residual
+loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(length(outcome))){
+  if (model == "linear"){
+    residual <- outcome - design %*% beta
+    logp <- -(1/2) * t(residual) %*% Sigma_inv %*% residual
+  } else if (model == "logistic"){
+    logp <- 1 # to do
+  }
   return(logp)
 }
 
@@ -19,14 +24,19 @@ loglik <- function(design, outcome, beta, Sigma_inv = diag(length(outcome))){
 #'
 #' @param design a n x p design matrix of numeric or factor predictors, possibly including an intercept.
 #' @param outcome a n-length numeric vector of outcomes.
+#' @param model a character indicating the link function between the linear predictors and the mean of the outcome.
 #' @param beta a p-length numeric vector at which to evaluate the log likelihood, possibly including an intercept.
 #' @param Sigma_inv the covariance matrix for the errors; default is nxn identity matrix; doesn't influence MLE estimate of beta (though would influence estimate of variance of beta).
 #'
 #' @return The gradient of the log likelihood of the data at beta.
 #'
-gradient_of_loglik <- function(design, outcome, beta, Sigma_inv = diag(length(outcome))) {
-  residual <- outcome - design %*% beta
-  grad <- t(design) %*% Sigma_inv %*% residual
-  grad <- as.vector(grad) # for conformity with other functions
+gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(length(outcome))) {
+  if (model == "linear"){
+    residual <- outcome - design %*% beta
+    grad <- t(design) %*% Sigma_inv %*% residual
+    grad <- as.vector(grad) # for conformity with other functions
+  } else if (model == "logistic"){
+    grad <- 1 # to do
+  }
   return(grad)
 }

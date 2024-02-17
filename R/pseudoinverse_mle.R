@@ -10,7 +10,6 @@
 #'
 pseudoinverse_mle <- function(design, outcome){
   beta_hat <- solve(t(design) %*% design, t(design) %*% outcome)
-
   beta_hat <- as.vector(beta_hat) # for conformity with other functions
   return(beta_hat)
 }
