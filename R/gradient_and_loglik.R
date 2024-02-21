@@ -15,7 +15,8 @@ loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(len
     residual <- outcome - design %*% beta
     logp <- -(1/2) * t(residual) %*% Sigma_inv %*% residual
   } else if (model == "logistic"){
-    logp <- 1 # to do
+    linear_pred <- design %*% beta
+    logp <- sum(outcome * linear_pred - log(1 + exp(linear_pred))) # equiv: t(outcome) %*% design %*% beta - sum(log(1 + exp(design %*% beta)))
   }
   return(logp)
 }
@@ -36,7 +37,8 @@ gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_in
     grad <- t(design) %*% Sigma_inv %*% residual
     grad <- as.vector(grad) # for conformity with other functions
   } else if (model == "logistic"){
-    grad <- 1 # to do
+    linear_pred <- design %*% beta
+    grad <- t(design) %*% outcome - t(design) %*% (exp(linear_pred) / (1 + exp(linear_pred)))
   }
   return(grad)
 }
