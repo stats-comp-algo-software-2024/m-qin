@@ -5,8 +5,8 @@ test_that("gradient calculation matches numerical gradient calculation (model='l
                         coef_true = NULL, design = NULL, seed = 140778)
 
   beta <- rep(0, n_pred + 1)
-  analytic_gradient <- gradient_of_loglik(data$design, data$outcome, beta)
-  numeric_gradient <- approx_grad_of_func(function(beta) loglik(data$design, data$outcome, beta), beta)
+  analytic_gradient <- gradient_of_log_lik(data$design, data$outcome, beta)
+  numeric_gradient <- approx_grad_of_func(function(beta) log_lik(data$design, data$outcome, beta), beta)
 
   expect_true(are_all_close(analytic_gradient, numeric_gradient))
 })
@@ -18,8 +18,8 @@ test_that("gradient calculation matches numerical gradient calculation (model='l
                         coef_true = NULL, design = NULL, seed = 140778)
 
   beta <- c(-1, 1, -1, 1, -1, 1, -1)
-  analytic_gradient <- gradient_of_loglik(data$design, data$outcome, beta)
-  numeric_gradient <- approx_grad_of_func(function(beta) loglik(data$design, data$outcome, beta), beta)
+  analytic_gradient <- gradient_of_log_lik(data$design, data$outcome, beta)
+  numeric_gradient <- approx_grad_of_func(function(beta) log_lik(data$design, data$outcome, beta), beta)
 
   expect_true(are_all_close(analytic_gradient, numeric_gradient))
 })
@@ -31,8 +31,8 @@ test_that("gradient calculation matches numerical gradient calculation (model='l
                         coef_true = NULL, design = NULL, seed = 140778)
 
   beta <- 1:(n_pred + 1) / 2
-  analytic_gradient <- gradient_of_loglik(design = data$design, outcome = data$outcome, beta = beta)
-  numeric_gradient <- approx_grad_of_func(function(beta) loglik(design = data$design, outcome = data$outcome, beta = beta), beta)
+  analytic_gradient <- gradient_of_log_lik(design = data$design, outcome = data$outcome, beta = beta)
+  numeric_gradient <- approx_grad_of_func(function(beta) log_lik(design = data$design, outcome = data$outcome, beta = beta), beta)
 
   expect_true(are_all_close(analytic_gradient, numeric_gradient))
 })
@@ -44,8 +44,8 @@ test_that("gradient calculation matches numerical gradient calculation (model='l
                         coef_true = NULL, design = NULL, seed = 140778)
 
   beta <- 1:(n_pred + 1) / 2
-  analytic_gradient <- gradient_of_loglik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta)
-  numeric_gradient <- approx_grad_of_func(function(beta) loglik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta), beta)
+  analytic_gradient <- gradient_of_log_lik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta)
+  numeric_gradient <- approx_grad_of_func(function(beta) log_lik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta), beta)
 
   expect_true(are_all_close(analytic_gradient, numeric_gradient))
 })
@@ -60,13 +60,13 @@ test_that("Hessian calculation matches numerical gradient calculation (model='lo
   vector1 <- c(1, rep(0, n_pred))
   vector2 <- c(rep(0, n_pred), 1)
 
-  analytic_hessian <- hessian_of_loglik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta)
+  analytic_hessian <- hessian_of_log_lik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta)
   analytic_hessian1 <- analytic_hessian %*% vector1
   analytic_hessian2 <- analytic_hessian %*% vector2
 
-  numeric_hessian1 <- approx_hess_of_func_at_vec(func = function(beta) loglik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta),
+  numeric_hessian1 <- approx_hess_of_func_at_vec(func = function(beta) log_lik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta),
                                                  x = beta, v = vector1)
-  numeric_hessian2 <- approx_hess_of_func_at_vec(func = function(beta) loglik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta),
+  numeric_hessian2 <- approx_hess_of_func_at_vec(func = function(beta) log_lik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta),
                                                  x = beta, v = vector2)
 
   expect_true(are_all_close(analytic_hessian1, numeric_hessian1, abs_tol = 1e-4, rel_tol = 1e-3))

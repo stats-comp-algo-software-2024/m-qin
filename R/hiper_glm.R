@@ -14,9 +14,9 @@
 hiper_glm <- function(design, outcome, model = "linear", option = list(mle_solver = "newton")){
   # to do: check that design and outcome are correctly formatted
 
-  if (option$mle_solver == "newton"){
+  if (option$mle_solver %in% c("newton", "Newton")){
     results <- newton_mle(design, outcome, model)
-  } else if (option$mle_solver == "BFGS"){
+  } else if (option$mle_solver %in% c("BFGS", "bfgs")){
     results <- bfgs_mle(design, outcome, model)
   }
 

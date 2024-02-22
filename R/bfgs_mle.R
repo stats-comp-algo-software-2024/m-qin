@@ -11,8 +11,8 @@
 #'
 bfgs_mle <- function(design, outcome, model = "linear"){
   bfgs <- stats::optim(par = rep(0, ncol(design)),
-                      fn = function(beta) loglik(design, outcome, beta, model),
-                      gr = function(beta) gradient_of_loglik(design, outcome, beta, model),
+                      fn = function(beta) log_lik(design, outcome, beta, model),
+                      gr = function(beta) gradient_of_log_lik(design, outcome, beta, model),
                       method = "BFGS",
                       control = list(fnscale = -1)) # maximize
   mle <- bfgs$par

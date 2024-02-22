@@ -10,7 +10,7 @@
 #'
 #' @return A scalar, the log likelihood of the data at beta.
 #'
-loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(length(outcome))){
+log_lik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(length(outcome))){
   if (model == "linear"){
     residual <- outcome - design %*% beta
     logp <- -(1/2) * t(residual) %*% Sigma_inv %*% residual
@@ -31,7 +31,7 @@ loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(len
 #'
 #' @return a p x 1 matrix, the gradient of the log likelihood of the data at beta.
 #'
-gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(length(outcome))) {
+gradient_of_log_lik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(length(outcome))) {
   if (model == "linear"){
     residual <- outcome - design %*% beta
     grad <- t(design) %*% Sigma_inv %*% residual
@@ -53,7 +53,7 @@ gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_in
 #'
 #' @return a p x 1 matrix, the Hessian of the log likelihood of the data at beta.
 #'
-hessian_of_loglik <- function(design, outcome, beta, model = "logistic", Sigma_inv = diag(length(outcome))) {
+hessian_of_log_lik <- function(design, outcome, beta, model = "logistic", Sigma_inv = diag(length(outcome))) {
   if (model %in% c("logistic", "logit")){
     linear_pred <- design %*% beta
     hess <- - t(design) %*% diag(as.vector(exp(linear_pred) / (1 + exp(linear_pred))^2)) %*% design
