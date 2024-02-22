@@ -1,4 +1,4 @@
-#' Calculate log likelihood of data in linear regression model at a point
+#' Log likelihood of regression model at a point
 #'
 #' @details This function computes the log likelihood of data in a linear regression model at a given value of beta.
 #'
@@ -21,6 +21,8 @@ log_lik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(le
   return(logp)
 }
 
+#' Gradient of log likelihood of regression model at a point
+#'
 #' @details This function computes, analytically, the gradient of the log likelihood in linear regression.
 #'
 #' @param design a n x p design matrix of numeric or factor predictors, possibly including an intercept.
@@ -43,6 +45,8 @@ gradient_of_log_lik <- function(design, outcome, beta, model = "linear", Sigma_i
   return(grad)
 }
 
+#' Hessian of log likelihood of regression model at a point
+#'
 #' @details This function computes, analytically, the Hessian matrix of the log likelihood in linear regression.
 #'
 #' @param design a n x p design matrix of numeric or factor predictors, possibly including an intercept.
