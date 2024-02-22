@@ -8,7 +8,7 @@
 #' @param beta a p-length numeric vector at which to evaluate the log likelihood, possibly including an intercept.
 #' @param Sigma_inv the covariance matrix for the errors; default is nxn identity matrix; doesn't influence MLE estimate of beta (though would influence estimate of variance of beta).
 #'
-#' @return The log likelihood of the data at beta.
+#' @return A scalar, the log likelihood of the data at beta.
 #'
 loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(length(outcome))){
   if (model == "linear"){
@@ -29,7 +29,7 @@ loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(len
 #' @param beta a p-length numeric vector at which to evaluate the log likelihood, possibly including an intercept.
 #' @param Sigma_inv the covariance matrix for the errors; default is nxn identity matrix; doesn't influence MLE estimate of beta (though would influence estimate of variance of beta).
 #'
-#' @return The gradient of the log likelihood of the data at beta.
+#' @return a p x 1 matrix, the gradient of the log likelihood of the data at beta.
 #'
 gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(length(outcome))) {
   if (model == "linear"){
@@ -51,14 +51,14 @@ gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_in
 #' @param beta a p-length numeric vector at which to evaluate the log likelihood, possibly including an intercept.
 #' @param Sigma_inv the covariance matrix for the errors; default is nxn identity matrix; doesn't influence MLE estimate of beta (though would influence estimate of variance of beta).
 #'
-#' @return The Hessian of the log likelihood of the data at beta.
+#' @return a p x 1 matrix, the Hessian of the log likelihood of the data at beta.
 #'
 hessian_of_loglik <- function(design, outcome, beta, model = "logistic", Sigma_inv = diag(length(outcome))) {
   if (model == "logistic"){
     linear_pred <- design %*% beta
-    grad <- t(design) %*% outcome - t(design) %*% (exp(linear_pred) / (1 + exp(linear_pred)))
+    hess <- - t(design) %*% diag(as.vector(exp(linear_pred) / (1 + exp(linear_pred))^2)) %*% design
   } else{
-    grad <- "yet to be implemented"
+    hess <- "yet to be implemented"
   }
-  return(grad)
+  return(hess)
 }

@@ -5,6 +5,7 @@
 #' @param design a n x p design matrix of numeric or factor predictors, possibly including an intercept.
 #' @param outcome a n-length numeric vector of outcomes.
 #' @param model a character indicating the link function between the linear predictors and the mean of the outcome.
+#' @param option a list of options; default is list(mle_solver = "newton")
 #'
 #' @return a fitted hiperglm object.
 #'

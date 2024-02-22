@@ -56,22 +56,39 @@ simulate_data <- function(
   return(list(design = design, outcome = outcome, coef_true = coef_true))
 }
 
-#' @details This function computes, using centered difference, a numeric approximation of gradient of any given function.
+#' @details This function computes, using centered difference, a numeric approximation of the gradient of any given function.
 #'
-#' @param function a function that takes in one input (x)
-#' @param x the value at which to evaluate the gradient
-#' @param dx the step size to use for the centered difference calculation
+#' @param function a function that takes in one vector input (x)
+#' @param x a vector, the value at which to evaluate the gradient
+#' @param dx a vector, the step size to use for the centered difference calculation
 #'
-#' @return The estimated gradient at x.
+#' @return a p x 1 matrix, the estimated gradient at x.
 #'
 approx_grad_of_func <- function(func, x, dx = .Machine$double.eps^(1/3)) {
   d <- length(x)
-  numerical_grad <- rep(0, d)
+  numerical_grad <- matrix(0, nrow = d, ncol = 1)
 
   for (i in 1:d){
     unit_vec <- rep(0, d)
     unit_vec[i] <- 1
-    numerical_grad[i] <- (func(x + dx * unit_vec) - func(x - dx * unit_vec)) / 2 / dx
+    numerical_grad[i, 1] <- (func(x + dx * unit_vec) - func(x - dx * unit_vec)) / 2 / dx
   }
   return(numerical_grad)
+}
+
+#' @details This function computes, using centered difference, a numeric approximation of the hessian of any given function.
+#'
+#' @param function a function that takes in one vector input (x)
+#' @param x a vector, the value at which to evaluate the gradient
+#' @param v a vector, the direction in which to evaluate the gradient
+#' @param dx a vector, the step size to use for x
+#' @param t a scalar, the step size to use for scaling v
+#'
+#' @return a p x 1 matrix, the estimated hessian at x.
+#'
+approx_hess_of_func_at_vec <- function(func, x, v, dx = .Machine$double.eps^(1/3), t = .Machine$double.eps^(1/3)) {
+  grad_as_func <- function(i) approx_grad_of_func(func, i, dx)
+  deriv_of_grad <- (grad_as_func(x + t*v) - grad_as_func(x - t*v)) / 2 / t
+  hess_as_matrix <- as.matrix(deriv_of_grad, ncol = 1)
+  return(hess_as_matrix)
 }
