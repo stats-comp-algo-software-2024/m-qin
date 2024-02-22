@@ -4,12 +4,21 @@
 \alias{hiper_glm}
 \title{Constructor for objects of the class hiperglm}
 \usage{
-hiper_glm(design, outcome)
+hiper_glm(
+  design,
+  outcome,
+  model = "linear",
+  option = list(mle_solver = "newton")
+)
 }
 \arguments{
-\item{design}{a n x p design matrix of numeric or factor predictors, possible including an intercept.}
+\item{design}{a n x p design matrix of numeric or factor predictors, possibly including an intercept.}
 
 \item{outcome}{a n-length numeric vector of outcomes.}
+
+\item{model}{a character indicating the link function between the linear predictors and the mean of the outcome.}
+
+\item{option}{a list of options; default is list(mle_solver = "newton")}
 }
 \value{
 a fitted hiperglm object.

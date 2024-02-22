@@ -9,7 +9,7 @@
 #'
 
 print.hiperglm <- function(x, ...){
-  warning("Yet to be implemented")
+  sapply(x, print)
 }
 
 
@@ -23,7 +23,7 @@ print.hiperglm <- function(x, ...){
 #'
 
 coef.hiperglm <- function(hiperglm){
-  warning("Yet to be implemented")
+  return(hiperglm$results)
 }
 
 

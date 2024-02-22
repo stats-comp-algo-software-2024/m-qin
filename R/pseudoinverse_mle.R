@@ -1,6 +1,6 @@
-#' Calculate the MLE for beta using pseudoinverse of design matrix
+#' Calculate the MLE for beta in OLS using pseudoinverse of design matrix
 #'
-#' @details This function calculates the MLE for beta in a least squares regression
+#' @details This function calculates the MLE for beta in a linear regression
 #' using the pseudoinverse of the design matrix.
 #'
 #' @param design a n x p design matrix of numeric or factor predictors, possible including an intercept.
@@ -10,7 +10,6 @@
 #'
 pseudoinverse_mle <- function(design, outcome){
   beta_hat <- solve(t(design) %*% design, t(design) %*% outcome)
-
   beta_hat <- as.vector(beta_hat) # for conformity with other functions
   return(beta_hat)
 }
