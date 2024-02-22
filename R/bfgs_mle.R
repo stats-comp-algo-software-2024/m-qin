@@ -7,7 +7,7 @@
 #' @param outcome a n-length numeric vector of outcomes.
 #' @param model a character indicating the link function between the linear predictors and the mean of the outcome.
 #'
-#' @return The estimated MLE for beta, i.e., value of beta that maximizes the (log) likelihood, as a vector.
+#' @return A p-length vector, the estimated MLE for beta, i.e., value of beta that maximizes the (log) likelihood, as a vector.
 #'
 bfgs_mle <- function(design, outcome, model = "linear"){
   bfgs <- stats::optim(par = rep(0, ncol(design)),
