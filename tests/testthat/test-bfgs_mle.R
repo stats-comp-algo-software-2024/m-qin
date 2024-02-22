@@ -30,3 +30,16 @@ test_that("Newton and BFGS outputs coincide on logit model (n=32, p=4)", {
                             coef(via_bfgs_out),
                             abs_tol = 1e-2, rel_tol = 1e-2))
 })
+
+test_that("Newton and BFGS outputs coincide on logit model (n=200, p=5)", {
+  data <- simulate_data(n_obs = 200, n_pred = 5, model = 'logit', seed = 1918)
+  design <- data$design
+  outcome <- data$outcome
+
+  via_newton_out <- hiper_glm(design, outcome, model = 'logit')
+  via_bfgs_out <- hiper_glm(design, outcome, model = 'logit', option = list(mle_solver = 'BFGS'))
+
+  expect_true(are_all_close(coef(via_newton_out),
+                            coef(via_bfgs_out),
+                            abs_tol = 1e-2, rel_tol = 1e-2))
+})
