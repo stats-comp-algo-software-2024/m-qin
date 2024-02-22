@@ -9,14 +9,17 @@
 #'
 #' @return The estimated MLE for beta, i.e., value of beta that maximizes the (log) likelihood, as a vector.
 #'
-newton_mle <- function(design, outcome, model = "linear"){
+newton_mle <- function(design, outcome, model = "logistic", n_iter = 10){
+  n_pred <- ncol(design)
+  beta <- matrix(0, nrow = n_pred, ncol = 1) # initial value
 
-  # to do: change this to be Newton's method not BFGS
-  bfgs <- stats::optim(par = rep(0, ncol(design)),
-                      fn = function(beta) loglik(design, outcome, beta, model),
-                      gr = function(beta) gradient_of_loglik(design, outcome, beta, model),
-                      method = "BFGS",
-                      control = list(fnscale = -1)) # maximize
-  mle <- bfgs$par
-  return(mle)
+  for (i in 1:n_iter){
+    grad <- gradient_of_loglik(design, outcome, beta, model)
+    hess <- hessian_of_loglik(design, outcome, beta, model)
+    # beta <- beta - solve(hess) %*% grad # don't use this because inverts a matrix
+    beta_diff <- solve(- hess, grad)
+    beta <- beta + beta_diff
+  }
+
+  return(beta)
 }
