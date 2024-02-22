@@ -14,7 +14,7 @@ loglik <- function(design, outcome, beta, model = "linear", Sigma_inv = diag(len
   if (model == "linear"){
     residual <- outcome - design %*% beta
     logp <- -(1/2) * t(residual) %*% Sigma_inv %*% residual
-  } else if (model == "logistic"){
+  } else if (model %in% c("logistic", "logit")){
     linear_pred <- design %*% beta
     logp <- sum(outcome * linear_pred - log(1 + exp(linear_pred))) # equiv: t(outcome) %*% design %*% beta - sum(log(1 + exp(design %*% beta)))
   }
@@ -36,7 +36,7 @@ gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_in
     residual <- outcome - design %*% beta
     grad <- t(design) %*% Sigma_inv %*% residual
     grad <- as.vector(grad) # for conformity with other functions
-  } else if (model == "logistic"){
+  } else if (model %in% c("logistic", "logit")){
     linear_pred <- design %*% beta
     grad <- t(design) %*% outcome - t(design) %*% (exp(linear_pred) / (1 + exp(linear_pred)))
   }
@@ -54,7 +54,7 @@ gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_in
 #' @return a p x 1 matrix, the Hessian of the log likelihood of the data at beta.
 #'
 hessian_of_loglik <- function(design, outcome, beta, model = "logistic", Sigma_inv = diag(length(outcome))) {
-  if (model == "logistic"){
+  if (model %in% c("logistic", "logit")){
     linear_pred <- design %*% beta
     hess <- - t(design) %*% diag(as.vector(exp(linear_pred) / (1 + exp(linear_pred))^2)) %*% design
   } else{
