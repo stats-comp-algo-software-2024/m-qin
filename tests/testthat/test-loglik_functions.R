@@ -49,3 +49,18 @@ test_that("gradient calculation matches numerical gradient calculation (model='l
 
   expect_true(are_all_close(analytic_gradient, numeric_gradient))
 })
+
+test_that("Hessian calculation matches numerical gradient calculation (model='logistic', n=100, p=2, beta=1:(n_pred+1)/2)", {
+  n_obs <- 100
+  n_pred <- 2
+  data <- simulate_data(n_obs = n_obs, n_pred = n_pred, model = "logistic", intercept = 1,
+                        coef_true = NULL, design = NULL, seed = 140778)
+
+  beta <- 1:(n_pred + 1) / 2
+
+  # to do: update this
+  analytic_gradient <- gradient_of_loglik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta)
+  numeric_gradient <- approx_grad_of_func(function(beta) loglik(design = data$design, outcome = data$outcome, model = "logistic", beta = beta), beta)
+
+  expect_true(are_all_close(analytic_gradient, numeric_gradient))
+})

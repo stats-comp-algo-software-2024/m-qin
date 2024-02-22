@@ -42,3 +42,23 @@ gradient_of_loglik <- function(design, outcome, beta, model = "linear", Sigma_in
   }
   return(grad)
 }
+
+#' @details This function computes, analytically, the Hessian matrix of the log likelihood in linear regression.
+#'
+#' @param design a n x p design matrix of numeric or factor predictors, possibly including an intercept.
+#' @param outcome a n-length numeric vector of outcomes.
+#' @param model a character indicating the link function between the linear predictors and the mean of the outcome.
+#' @param beta a p-length numeric vector at which to evaluate the log likelihood, possibly including an intercept.
+#' @param Sigma_inv the covariance matrix for the errors; default is nxn identity matrix; doesn't influence MLE estimate of beta (though would influence estimate of variance of beta).
+#'
+#' @return The Hessian of the log likelihood of the data at beta.
+#'
+hessian_of_loglik <- function(design, outcome, beta, model = "logistic", Sigma_inv = diag(length(outcome))) {
+  if (model == "logistic"){
+    linear_pred <- design %*% beta
+    grad <- t(design) %*% outcome - t(design) %*% (exp(linear_pred) / (1 + exp(linear_pred)))
+  } else{
+    grad <- "yet to be implemented"
+  }
+  return(grad)
+}
